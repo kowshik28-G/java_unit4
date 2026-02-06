@@ -1,0 +1,61 @@
+CREATE TABLE expenses (
+    expense_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT,
+    amount REAL,
+    description TEXT,
+    category_id INTEGER,
+    user_id INTEGER,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    email TEXT
+);
+CREATE TABLE categories (
+    category_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_name TEXT
+);
+
+CREATE TABLE expenses (
+    expense_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT,
+    amount REAL,
+    description TEXT,
+    category_id INTEGER,
+    user_id INTEGER,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+INSERT INTO categories (category_name) VALUES ('Food');
+INSERT INTO categories (category_name) VALUES ('Travel');
+INSERT INTO categories (category_name) VALUES ('Shopping');
+INSERT INTO expenses (date, amount, description, category_id, user_id)
+VALUES ('2026-01-30', 250, 'Lunch', 1, 1);
+
+INSERT INTO expenses (date, amount, description, category_id, user_id)
+VALUES ('2026-01-31', 1200, 'Bus Ticket', 2, 1);
+
+INSERT INTO expenses (date, amount, description, category_id, user_id)
+VALUES ('2026-02-01', 800, 'Dress Shopping', 3, 1);
+SELECT e.expense_id, e.date, e.amount, e.description,
+       c.category_name, u.name
+FROM expenses e
+JOIN categories c ON e.category_id = c.category_id
+JOIN users u ON e.user_id = u.user_id;
+SELECT u.name, SUM(e.amount) AS total_expense
+FROM expenses e
+JOIN users u ON e.user_id = u.user_id
+GROUP BY u.name;
+SELECT c.category_name, SUM(e.amount) AS total
+FROM expenses e
+JOIN categories c ON e.category_id = c.category_id
+GROUP BY c.category_name;
+SELECT description, MAX(amount) AS highest_amount
+FROM expenses;
+SELECT substr(date,1,7) AS month, SUM(amount) AS total
+FROM expenses
+GROUP BY month;
+INSERT INTO users (user_id, name, email)
+VALUES (1, 'Kowshik', 'kowshik@gmail.com');
